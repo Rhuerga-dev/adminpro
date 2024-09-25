@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
 import { AuthModule } from './auth/auth.module';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -20,7 +21,9 @@ import { NotpagefoundComponent } from './notpagefound/notpagefound.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    PagesModule, AuthModule
+    PagesModule, 
+    AuthModule,
+    FormsModule
   ],
   bootstrap: [AppComponent]
 })
