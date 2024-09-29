@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -11,7 +11,7 @@ declare const google: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements  AfterViewInit {
 
   @ViewChild('googleBtn') googleBtn?: ElementRef;
 
@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private ngZone: NgZone) {
 
   }
-  ngOnInit(): void {
-  }
+  
+  
 
   ngAfterViewInit(): void {
 
@@ -43,13 +43,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   }
 
-
   googleInit() {
     google.accounts.id.initialize({
       client_id: "646991237896-urlup2se3iqo8tfo5gcerph1047cgdl6.apps.googleusercontent.com",
       // Mantener a this. apuntado a la clase loginForm
       callback: (response: any) => this.handleCredentialResponse(response)
-
+        
     });
     google.accounts.id.renderButton(
       this.googleBtn?.nativeElement,
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     //console.log("Encoded JWT ID token: " + response.credential);
     this.userService.loginGoogle(response.credential)
       .subscribe(resp => {
-
         // Navegar al Dashboard
         this.ngZone.run(() => {
           this.router.navigateByUrl('/');
@@ -71,15 +69,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
 
-
-
   login() {
     this.formSubmited = true;
 
     this.userService.login(this.loginForm.value)
       .subscribe(resp => {
-        console.log(resp);
-
         // Guardar email si esta activo remember me
         if (this.loginForm.get('remember')?.value) {
           localStorage.setItem('email', this.loginForm.get('email')?.value);
@@ -116,9 +110,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.formSubmited = false;
       });
   }
-
-
-
 
 }
 

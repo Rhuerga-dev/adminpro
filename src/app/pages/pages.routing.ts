@@ -10,6 +10,7 @@ import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -29,7 +30,7 @@ const routes: Routes = [
             { path: 'account-settings', component: AccountSettingsComponent, data: { title: 'Temas'} },
             { path: 'promesas', component: PromesasComponent, data: { title: 'Promesas'} },
             { path: 'rxjs', component: RxjsComponent, data: { title: 'Rxjs'} },
-            //{ path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+            { path: 'profile', component: ProfileComponent, data: { title: 'profile'} },
         ]
     },
 ];

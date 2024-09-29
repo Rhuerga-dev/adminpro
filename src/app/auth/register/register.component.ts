@@ -13,23 +13,23 @@ export class RegisterComponent {
 
   public formSubmited = false;
 
-  public registerForm = this.fb.group({
-    name: [ 'Reynaldo', Validators.required ],
-    email: [ 'test20@gmail.com', [ Validators.required, Validators.email ] ],
-    password: [ '123456', Validators.required ],
-    password2: [ '123456', Validators.required ],
-    terminos: [ true, Validators.required ],
+
+  constructor(private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router,
+    private ngZone: NgZone) { }
+
+
+  public registerForm: FormGroup = this.fb.group({
+    name: ['Reynaldo', Validators.required],
+    email: ['test20@gmail.com', [Validators.required, Validators.email]],
+    password: ['123456', Validators.required],
+    password2: ['123456', Validators.required],
+    terminos: [true, Validators.required],
   },
     {
       validators: this.matchedPassword('password', 'password2')
     });
-
-  constructor(private fb: FormBuilder, 
-              private userService: UserService, 
-              private router: Router,
-              private ngZone: NgZone) { }
-
-
 
   createUser() {
 
@@ -43,22 +43,22 @@ export class RegisterComponent {
 
     // Realizar posteo
     this.userService.createUser(this.registerForm.value)
-    .subscribe( resp => {
+      .subscribe(resp => {
         console.log(resp);
-      // Navegar al Dashboard
-      this.ngZone.run(() => {
-        this.router.navigateByUrl('/');
+        // Navegar al Dashboard
+        this.ngZone.run(() => {
+          this.router.navigateByUrl('/');
+        });
+
+        this.formSubmited = false;
+
+      }, (err) => {
+        // Si sucede un error
+        Swal.fire('Error', err.error.msg, 'error');
+
+        this.formSubmited = false;
       });
-      
-      this.formSubmited = false;
-      
-    }, (err) => {
-      // Si sucede un error
-      Swal.fire('Error', err.error.msg, 'error' );
-      
-      this.formSubmited = false;
-    });  
-                
+
 
   }
 
@@ -83,7 +83,7 @@ export class RegisterComponent {
     const pass2 = this.registerForm.get('password2')?.value;
 
 
-    if ( (pass1 !== pass2) && this.formSubmited ) {
+    if ((pass1 !== pass2) && this.formSubmited) {
 
       return true;
 

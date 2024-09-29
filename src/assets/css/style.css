@@ -769,8 +769,9 @@ Main sidebar
 /*******************
 use profile section
 ******************/
+
 .sidebar-nav .user-profile > a img {
-  width: 30px;
+  width: 30%;
   border-radius: 100%;
   margin-right: 10px; }
 
@@ -1085,6 +1086,7 @@ File: scss
         overflow: hidden;
         background-color: rgba(120, 130, 140, 0.13); }
       .topbar ul.dropdown-user li .dw-user-box {
+        display: flex;
         padding: 10px 15px; }
         .topbar ul.dropdown-user li .dw-user-box .u-img {
           width: 70px;

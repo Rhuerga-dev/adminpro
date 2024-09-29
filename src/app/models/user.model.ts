@@ -1,3 +1,7 @@
+import { environment } from '../../environments/environment';
+
+const base_url = environment.base_url;
+
 export class User {
 
     constructor(
@@ -11,4 +15,13 @@ export class User {
         public uid?:      string,
 
     ) { }
+
+    get imageUrl () {
+        return  this.img!.includes('https') 
+             ? this.img : (this.img !== '') 
+             ? `${base_url}/uploads/users/${this.img}` : `${base_url}/uploads/users/no-image`;
+        
+    }
+    
+    
 }
