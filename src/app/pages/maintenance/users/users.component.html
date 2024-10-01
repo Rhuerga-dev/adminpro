@@ -1,0 +1,93 @@
+<div class="row animated fadeIn fast">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input type="text" class="form-control" placeholder="Buscar usuario ..." (keyup)="txtTerm.value.trim() ? search(txtTerm.value) : null"
+                    #txtTerm />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="loading">
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h4 class="alert-heading">Cargando</h4>
+            <i class="fa fa-spin fa-refresh fa-2x"></i>
+            <p class="mb-0">Por Favor espere</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="!loading">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Total de Usuarios</h4>
+                <h6 class="card-subtitle">Usuarios registrados en mi aplicacion</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="w10">No</th>
+                                <th class="w100">Avatar</th>
+                                <th>Correo</th>
+                                <th>Nombre</th>
+                                <th>Role</th>
+                                <th>Auth</th>
+                                <th class="text-nowrap w100">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users; let i = index ">
+                                <td>{{indexOff + i + 1}}</td>
+                                <td class="text-center">
+                                    <img [src]="user.imageUrl" 
+                                          alt="Avatar de ususario " 
+                                          (click)="openModal( user )"
+                                          class="avatar">
+                                </td>
+                                <td>{{ user.email}}</td>
+                                <td>{{ user.name}}</td>
+                                <td>
+                                    <select class="form-control border-0"
+                                            [(ngModel)]="user.role"
+                                            (change)="changeRole( user )">
+                                        <option value="ADMIN_ROLE">Admin</option>
+                                        <option value="USER_ROLE">User</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <span *ngIf="user.google" class="label label-danger">Google</span>
+                                    <span *ngIf="!user.google" class="label label-info">Email</span>
+                                </td>
+
+                                <td class="text-nowrap text-center">
+                                    <a  data-toggle="tooltip" 
+                                        data-original-title="Borrar"
+                                        (click)="deleteUser( user )"
+                                        [ariaDisabled]="user.role === 'USER_ROLE'"
+                                        class="pointer"> 
+                                    <i class="fa fa-close text-danger"></i> </a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="txtTerm.value.length === 0">
+
+                    <button (click)="changePage(-limit)" [disabled]="indexOff === 0"
+                        class="btn btn-secondary">Atras</button>
+                    &nbsp;
+                    <button (click)="changePage(limit)" 
+                            [disabled]="indexOff > totalIndex - limit"
+                            class="btn btn-secondary cursor">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
+import { AppComponent } from '../../app.component';
 
 declare const google: any;
 
@@ -31,6 +32,7 @@ export class LoginComponent implements  AfterViewInit {
   constructor(private router: Router,
     private fb: FormBuilder,
     private userService: UserService,
+    private appComponent: AppComponent,
     private ngZone: NgZone) {
 
   }
@@ -39,35 +41,19 @@ export class LoginComponent implements  AfterViewInit {
 
   ngAfterViewInit(): void {
 
-    this.googleInit();
+    this.renderGoogleButton();
 
   }
 
-  googleInit() {
-    google.accounts.id.initialize({
-      client_id: "646991237896-urlup2se3iqo8tfo5gcerph1047cgdl6.apps.googleusercontent.com",
-      // Mantener a this. apuntado a la clase loginForm
-      callback: (response: any) => this.handleCredentialResponse(response)
-        
-    });
+  renderGoogleButton(){
+    
+    this.appComponent.googleInit();
+
     google.accounts.id.renderButton(
       this.googleBtn?.nativeElement,
       { theme: "outline", size: "large" }
     );
-    google.accounts.id.prompt();
   }
-
-  handleCredentialResponse(response: any) {
-    //console.log("Encoded JWT ID token: " + response.credential);
-    this.userService.loginGoogle(response.credential)
-      .subscribe(resp => {
-        // Navegar al Dashboard
-        this.ngZone.run(() => {
-          this.router.navigateByUrl('/');
-        });
-      });
-  }
-
 
   login() {
     this.formSubmited = true;

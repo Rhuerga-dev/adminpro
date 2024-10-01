@@ -16,6 +16,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { ProfileComponent } from './profile/profile.component';
+import { UsersComponent } from './maintenance/users/users.component';
 
 
 
@@ -30,7 +31,8 @@ import { ProfileComponent } from './profile/profile.component';
     AccountSettingsComponent,
     PromesasComponent,
     RxjsComponent,
-    ProfileComponent
+    ProfileComponent,
+    UsersComponent
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { ProfileComponent } from './profile/profile.component';
     ProgressComponent,
     Grafica1Component,
     PagesComponent,
-    AccountSettingsComponent
+    AccountSettingsComponent,
+    UsersComponent
   ]
 })
 export class PagesModule { }

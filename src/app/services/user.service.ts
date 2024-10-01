@@ -1,11 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, NgZone } from '@angular/core';
-import { RegisterForm } from '../interfaces/register-form.interface';
+import { ElementRef, Injectable, NgZone, ViewChild } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { catchError, map, tap } from 'rxjs/operators';
-import { LoginForm } from '../interfaces/login-form.interface';
 import { Observable, of } from 'rxjs';
+
 import { Router } from '@angular/router';
+
+import { RegisterForm } from '../interfaces/register-form.interface';
+import { LoginForm } from '../interfaces/login-form.interface';
+import { ChargeUser } from '../interfaces/charge-users.interface';
+
 import { User } from '../models/user.model';
 
 
@@ -19,7 +23,9 @@ const base_url = environment.base_url;
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService  {
+
+  @ViewChild('googleBtn') googleBtn?: ElementRef;
 
   public auth2: any;
   public user!: User;
@@ -32,10 +38,23 @@ export class UserService {
     return localStorage.getItem('token') || '';
   }
 
-  logout() {
-    const email = localStorage.getItem('email') || '';
+  get email(): string {
+    return localStorage.getItem('email') || '';
+  }
+  get uid(): string {
+    return this.user.uid || '';
+  }
 
-    google.accounts.id.revoke(email, () => {
+  get headers() {
+    return { headers: { 'x-token': this.token } }
+  }
+
+
+  
+
+  logout() {
+
+    google.accounts.id.revoke(this.email, () => {
       // Navegar al Dashboard
       this.ngZone.run(() => {
         this.router.navigateByUrl('/login');
@@ -45,13 +64,15 @@ export class UserService {
     });
   }
 
+
   validateToken(): Observable<boolean> {
 
-    return this.http.get(`${base_url}/login/renew`, {
-      headers: {
-        'x-token': this.token
-      }
-    }).pipe(
+    google.accounts.id.initialize({
+      client_id: "646991237896-urlup2se3iqo8tfo5gcerph1047cgdl6.apps.googleusercontent.com",
+        
+    });
+
+    return this.http.get(`${base_url}/login/renew`, this.headers).pipe(
       map((resp: any) => {
 
         const {
@@ -77,18 +98,14 @@ export class UserService {
       );
   }
 
-  updateProfile(data: { email: string, name: string, role?: string }) {
+  updateProfile(data: { email: string, name: string, role: string }) {
 
     data = {
       ...data,
-      role: this.user.role
+      role: this.user.role!
     };
 
-    return this.http.put(`${base_url}/users/${this.user?.uid}`, data, {
-      headers: {
-        'x-token': this.token
-      }
-    });
+    return this.http.put(`${base_url}/users/${this.user?.uid}`, data, this.headers);
   }
 
 
@@ -113,4 +130,28 @@ export class UserService {
         })
       );
   }
+
+  uploadUser(indexOff: number, limit: number) {
+    return this.http.get<ChargeUser>(`${base_url}/users?indexOff=${indexOff}&limit=${limit} `, this.headers)
+      .pipe(
+        //delay(5000),
+        map(resp => {
+          //console.log(resp);
+          const users = resp.users.map(
+            user => new User( user.name,user.email, '', user.img, user.google, user.role, user.uid ));
+          return { totalIndex: resp.totalIndex, users };
+        })
+      );
+
+  }
+
+  deleteUser(user: User) {
+
+    return this.http.delete(`${base_url}/users/${user.uid}`, this.headers);
+  }
+
+  saveUser(user: User) {
+    return this.http.put(`${base_url}/users/${user.uid}`, user, this.headers);
+  }
+
 }

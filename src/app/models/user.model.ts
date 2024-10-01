@@ -17,9 +17,16 @@ export class User {
     ) { }
 
     get imageUrl () {
-        return  this.img!.includes('https') 
-             ? this.img : (this.img !== '') 
-             ? `${base_url}/uploads/users/${this.img}` : `${base_url}/uploads/users/no-image`;
+        
+        if ( ! this.img ) {
+            return `${ base_url }/uploads/users/no-image`;
+        } else if ( this.img.includes('https') ) {
+            return this.img;
+        } else if ( this.img ) {
+            return `${ base_url }/uploads/users/${ this.img }`;
+        } else {
+            return `${ base_url }/uploads/users/no-image`;
+        }
         
     }
     
