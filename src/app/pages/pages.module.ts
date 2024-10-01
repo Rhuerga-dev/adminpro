@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 // Modulos
 import { ComponentModule } from '../components/component.module';
 import { SharedModule } from '../shared/shared.module';
+import { PipesModule } from '../pipes/pipes.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProgressComponent } from './progress/progress.component';
@@ -17,6 +18,7 @@ import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './maintenance/users/users.component';
+import { HospitalsComponent } from './hospitals/hospitals.component';
 
 
 
@@ -32,7 +34,8 @@ import { UsersComponent } from './maintenance/users/users.component';
     PromesasComponent,
     RxjsComponent,
     ProfileComponent,
-    UsersComponent
+    UsersComponent,
+    HospitalsComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +43,8 @@ import { UsersComponent } from './maintenance/users/users.component';
     RouterModule,
     ComponentModule,
     FormsModule,
-    ReactiveFormsModule  
+    ReactiveFormsModule,
+    PipesComponent  
 ],
   exports: [
     DashboardComponent,
@@ -48,7 +52,8 @@ import { UsersComponent } from './maintenance/users/users.component';
     Grafica1Component,
     PagesComponent,
     AccountSettingsComponent,
-    UsersComponent
+    UsersComponent,
+    HospitalsComponent,
   ]
 })
 export class PagesModule { }

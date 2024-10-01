@@ -131,7 +131,7 @@ export class UserService  {
       );
   }
 
-  uploadUser(indexOff: number, limit: number) {
+  getUsers(indexOff: number, limit: number) {
     return this.http.get<ChargeUser>(`${base_url}/users?indexOff=${indexOff}&limit=${limit} `, this.headers)
       .pipe(
         //delay(5000),

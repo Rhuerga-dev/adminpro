@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
               private searchService: SearchsService,
-              private modelInamgeService: ModalImageService) { }
+              private modelImageService: ModalImageService) { }
 
 
   ngOnDestroy(): void {
@@ -37,17 +37,17 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.chargeUser();
-    this.imgSubs= this.modelInamgeService.newImage
+    this.getUsers();
+    this.imgSubs= this.modelImageService.newImage
     .pipe( delay(100) )
-    .subscribe( img => this.chargeUser()  );
+    .subscribe( img => this.getUsers()  );
   }
 
 
 
-  chargeUser() {
+  getUsers() {
     this.loading = true;
-    this.userService.uploadUser(this.indexOff, this.limit).subscribe(({ totalIndex, users }) => {
+    this.userService.getUsers(this.indexOff, this.limit).subscribe(({ totalIndex, users }) => {
       this.totalIndex = totalIndex;
       this.users = users
       this.usersTemp = users
@@ -63,7 +63,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     } else if (this.indexOff >= this.totalIndex) {
       this.indexOff -= value;
     }
-    this.chargeUser();
+    this.getUsers();
   }
 
   search(term: string) {
@@ -94,7 +94,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         if (result.isConfirmed) {
           this.userService.deleteUser(user)
             .subscribe(resp => {
-              this.chargeUser();
+              this.getUsers();
               Swal.fire('Usuario Borrado',
                 `${user.name} fue eliminado corectamente`,
                 'success'
@@ -114,7 +114,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   openModal( user: User){
     console.log(user);
-    this.modelInamgeService.openModal( 'users', user.uid!, user.img);
+    this.modelImageService.openModal( 'users', user.uid!, user.img);
   }
 
 }
